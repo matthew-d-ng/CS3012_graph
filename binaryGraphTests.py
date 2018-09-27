@@ -16,8 +16,8 @@ class graphTest(unittest.TestCase):
                                         "size of empty graph not 0")
 
         assert not self.graph.contains(5),\
-            ("empty graph does not contain key B",
-             "empty graph contains key B")
+            ("empty graph does not contain key 5",
+             "empty graph contains key 5")
 
         assert self.graph.getValue(5) is None,\
             ("Empty graph correctly return nothing for key B",
@@ -29,8 +29,22 @@ class graphTest(unittest.TestCase):
 
     def testForNonEmptyGraph(self):
 
+        assert self.graph.addValue(1, 1)
+        assert self.graph.removeKey(1),\
+            ("return true for succesfully removed node to remove graph",
+             "node won't add to empty graph")
+        assert self.graph.getKey(1),\
+            ("removed key 1 is None",
+             "key 1 didn't remove")
+
+        assert self.graph.addValue(8, 1)
+        self.graph.removeKey(8)
+        assert self.graph.getKey(8),\
+            ("removed key 8 is None",
+             "key 8 didn't remove")
+
         assert self.graph.getValue(5) == 1,\
-            ("return correct value for key B after adding to empty graph",
+            ("return correct value for key 5 after adding to empty graph",
              "value not returned after adding to empty graph")
 
         self.graph.addValue(4, 9)
@@ -38,11 +52,11 @@ class graphTest(unittest.TestCase):
         self.graph.addValue(7, 10)
 
         assert self.graph.getValue(4) == 9,\
-            ("value of A correctly added to existing graph",
-             "value of A not added to existing graph")
+            ("value of key 4 correctly added to existing graph",
+             "value of key 4 not added to existing graph")
         assert self.graph.getValue(7) == 10,\
-            ("value of D correctly added to existing graph",
-             "value of D not added to existing graph")
+            ("value of key 7 correctly added to existing graph",
+             "value of key 7 not added to existing graph")
 
         def testLCA(self):
 

@@ -30,16 +30,14 @@ class GraphTest(unittest.TestCase):
     def testForNonEmptyGraph(self):
 
         assert self.graph.addValue(1, 1)
-        assert self.graph.removeKey(1),\
-            ("return true for succesfully removed node to remove graph",
-             "node won't add to empty graph")
-        assert self.graph.getKey(1),\
+        self.graph.removeKey(1)
+        assert self.graph.getValue(1) is None,\
             ("removed key 1 is None",
              "key 1 didn't remove")
 
         assert self.graph.addValue(8, 1)
         self.graph.removeKey(8)
-        assert self.graph.getKey(8),\
+        assert self.graph.getValue(8) is None,\
             ("removed key 8 is None",
              "key 8 didn't remove")
 
@@ -89,3 +87,4 @@ class GraphTest(unittest.TestCase):
 tests = GraphTest()
 tests.testForEmptyGraph()
 tests.testForNonEmptyGraph()
+print("Concluded tests.")

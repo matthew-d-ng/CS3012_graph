@@ -1,8 +1,8 @@
-import BinaryGraph
+from BinaryGraph import BinaryGraph
 import unittest
 
 
-class graphTest(unittest.TestCase):
+class GraphTest(unittest.TestCase):
 
     def __init__(self):
         self.graph = BinaryGraph()
@@ -12,8 +12,8 @@ class graphTest(unittest.TestCase):
         assert self.graph.isEmpty(), ("empty graph returned as empty",
                                       "empty graph returning non-empty")
 
-        assert self.graph.size() == 0, ("size of empty graph is 0",
-                                        "size of empty graph not 0")
+        assert self.graph.getSize() == 0, ("size of empty graph is 0",
+                                           "size of empty graph not 0")
 
         assert not self.graph.contains(5),\
             ("empty graph does not contain key 5",
@@ -83,3 +83,9 @@ class graphTest(unittest.TestCase):
             assert self.graph.getLowestCommonAncestor(13, 4) is None,\
                 ("correctly found None for value that doesn't exist",
                  "didn't return none for non-existent key for some reason")
+
+
+# main
+tests = GraphTest()
+tests.testForEmptyGraph()
+tests.testForNonEmptyGraph()

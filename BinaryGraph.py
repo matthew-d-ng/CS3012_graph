@@ -1,17 +1,17 @@
 
-class BinaryGraph:
+class BinaryGraph(object):
 
-    class GraphNode:
+    def __init__(self):
+        self.size = 0
+        self.head = None
+
+    class GraphNode(object):
 
         def __init__(self, key, value):
             self.key = key
             self.value = value
             self.left = None
             self.right = None
-
-    def __init__(self):
-        self.size = 0
-        self.head = None
 
     def getSize(self):
         return self.size
@@ -27,7 +27,7 @@ class BinaryGraph:
             return None  # TODO
 
     def getValue(self, key):
-        if self.key is not None and self.value is not None:
+        if key is not None and self.head is not None:
             return self._getValue(self.head, key)
         else:
             return None

@@ -36,12 +36,13 @@ class BinaryGraph(object):
     def _addValue(self, currentNode, key, value):
         if currentNode is None:
             return self.GraphNode(key, value)
-        elif currentNode.key < key:
-            currentNode.left = self._addValue(currentNode.left, key, value)
         elif currentNode.key > key:
+            currentNode.left = self._addValue(currentNode.left, key, value)
+        elif currentNode.key < key:
             currentNode.right = self._addValue(currentNode.right, key, value)
         currentNode.size = 1 + self._getSize(currentNode.left) \
                              + self._getSize(currentNode.right)
+
         return currentNode
 
     def getValue(self, key):
@@ -54,7 +55,7 @@ class BinaryGraph(object):
         if currentNode is not None:
             if currentNode.key == key:
                 return currentNode.value
-            elif currentNode.key > key:
+            elif currentNode.key < key:
                 return self._getValue(currentNode.right, key)
             else:
                 return self._getValue(currentNode.left, key)
@@ -67,9 +68,9 @@ class BinaryGraph(object):
     def _removeKey(self, currentNode, key):
         if currentNode is None:
             return None
-        if currentNode.key < key:
+        if currentNode.key > key:
             currentNode.left = self._removeKey(currentNode.left, key)
-        elif currentNode.key > key:
+        elif currentNode.key < key:
             currentNode.right = self._removeKey(currentNode.right, key)
         else:
             if currentNode.right is None:
@@ -97,3 +98,19 @@ class BinaryGraph(object):
     def _removePred(self, currentNode):
         pred = self._findPred(currentNode, currentNode.key)
         return self._removeKey(self.root, pred.key)
+
+    def getLowestCommonAncestor(self, key1, key2):
+        if key1 is not None and key2 is not None and self.root is not None:
+            if self.contains(key1) and self.contains(key2):
+                if key1 != key2:
+                    return self._getLowestCommonAncestor(self.root, key1, key2)
+                else:
+                    return key1
+        return None
+
+    def _getLowestCommonAncestor(self, currentNode, key1, key2):
+        if key1 < currentNode.key and key2 < currentNode.key:
+            return self._getLowestCommonAncestor(currentNode.left, key1, key2)
+        if key1 > currentNode.key and key2 > currentNode.key:
+            return self._getLowestCommonAncestor(currentNode.right, key1, key2)
+        return currentNode.key

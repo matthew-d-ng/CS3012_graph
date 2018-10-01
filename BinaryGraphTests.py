@@ -56,35 +56,36 @@ class GraphTest(unittest.TestCase):
             ("value of key 7 correctly added to existing graph",
              "value of key 7 not added to existing graph")
 
-        def testLCA(self):
+    def testLCA(self):
 
-            self.graph.addValue(11, 12)
-            self.graph.addValue(10, 13)
-            self.graph.addValue(12, 14)
+        self.graph.addValue(11, 12)
+        self.graph.addValue(10, 13)
+        self.graph.addValue(12, 14)
 
-            # ancestor checking goes through one of the nodes
-            assert self.graph.getLowestCommonAncestor(10, 11) == 7,\
-                ("correctly received close ancestor key 7 for 12 and 11"
-                 "LCA failed, expected key 7 on keys 12 and 11")
+        # ancestor checking goes through one of the nodes
+        assert self.graph.getLowestCommonAncestor(10, 11) == 11,\
+            ("correctly received close ancestor key 7 for 10 and 11"
+             "LCA failed, expected key 7 on keys 10 and 11")
 
-            # ancestor should be directly above the two nodes
-            assert self.graph.getLowestCommonAncestor(12, 10) == 11,\
-                ("correctly received close ancestor key 11 for 12 and 10"
-                 "LCA failed, expected key 11 on keys 12 and 10")
+        # ancestor should be directly above the two nodes
+        assert self.graph.getLowestCommonAncestor(12, 10) == 11,\
+            ("correctly received close ancestor key 11 for 12 and 10"
+             "LCA failed, expected key 11 on keys 12 and 10")
 
-            # checking for keys further away
-            assert self.graph.getLowestCommonAncestor(12, 4) == 5,\
-                ("correctly found distant ancestor key 5 for 12 and 4",
-                 "LCA failed for distant ancestor 5 for keys 12 and 4")
+        # checking for keys further away
+        assert self.graph.getLowestCommonAncestor(12, 4) == 5,\
+            ("correctly found distant ancestor key 5 for 12 and 4",
+             "LCA failed for distant ancestor 5 for keys 12 and 4")
 
-            # key doesn't exist
-            assert self.graph.getLowestCommonAncestor(13, 4) is None,\
-                ("correctly found None for value that doesn't exist",
-                 "didn't return none for non-existent key for some reason")
+        # key doesn't exist
+        assert self.graph.getLowestCommonAncestor(13, 4) is None,\
+            ("correctly found None for value that doesn't exist",
+             "didn't return none for non-existent key for some reason")
 
 
 # main
 tests = GraphTest()
 tests.testForEmptyGraph()
 tests.testForNonEmptyGraph()
+tests.testLCA()
 print("Concluded tests.")

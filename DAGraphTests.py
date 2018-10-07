@@ -1,86 +1,86 @@
-from BinaryGraph import BinaryGraph
+from DAGraph import DAGraph
 import unittest
 
 
 class GraphTest(unittest.TestCase):
 
     def __init__(self):
-        self.graph = BinaryGraph()
+        self.graph = DAGraph()
 
     def testForEmptyGraph(self):
 
-        assert self.graph.isEmpty(), ("empty graph returned as empty",
-                                      "empty graph returning non-empty")
+        assert self.graph.isEmpty(), "empty graph returning non-empty"
 
-        assert self.graph.getSize() == 0, ("size of empty graph is 0",
-                                           "size of empty graph not 0")
+        assert self.graph.getSize() == 0, "size of empty graph not 0"
 
-        assert not self.graph.contains(5),\
-            ("empty graph does not contain key 5",
-             "empty graph contains key 5")
+        assert not self.graph.contains(5), "empty graph contains key 5"
 
         assert self.graph.getValue(5) is None,\
-            ("Empty graph correctly return nothing for key B",
-             "Empty graph returning values for non existent node")
+            "Empty graph returning values for non existent node"
 
-        assert self.graph.addValue(5, 1),\
-            ("return true for succesfully added node to empty graph",
-             "node won't add to empty graph")
+        assert self.graph.addValue(5, 'a'),\
+            "node won't add to empty graph"
 
     def testForNonEmptyGraph(self):
 
-        assert self.graph.addValue(1, 1)
+        assert self.graph.getValue(5) == 'a',\
+            "value not returned after adding to empty graph"
+
+        self.graph.addValue(1, 'b')
         self.graph.removeKey(1)
-        assert self.graph.getValue(1) is None,\
-            ("removed key 1 is None",
-             "key 1 didn't remove")
+        assert self.graph.getValue(1) is None, "key 1 didn't remove"
+        assert self.graph.getPath(1) is None,\
+            "returning non-existent path from 5 to 1"
 
-        assert self.graph.addValue(8, 1)
-        self.graph.removeKey(8)
-        assert self.graph.getValue(8) is None,\
-            ("removed key 8 is None",
-             "key 8 didn't remove")
+        self.graph.addValue(1, 'b')
+        self.graph.addValue(8, 'c')
+        assert self.graph.addEdge(5, 1), "edge failed to add"
+        self.graph.addEdge(1, 8)
+        assert self.graph.getPath(8) == {5, 1, 8},\
+            "path to 8 unexpected path"
 
-        assert self.graph.getValue(5) == 1,\
-            ("return correct value for key 5 after adding to empty graph",
-             "value not returned after adding to empty graph")
+        assert not self.graph.addEdge(8, 5), "cycle created in acyclic graph"
 
-        self.graph.addValue(4, 9)
-        self.graph.addValue(6, 7)
-        self.graph.addValue(7, 10)
+        # build a graph
+        self.graph.addValue(4, 'd')
+        self.graph.addEdge(1, 4)
+        self.graph.addEdge(8, 4)
+        self.graph.addValue(6, 'e')
+        self.graph.addEdge(4, 6)
+        self.graph.addEdge(8, 6)
+        self.graph.addValue(7, 'f')
+        self.graph.addEdge(6, 7)
 
-        assert self.graph.getValue(4) == 9,\
-            ("value of key 4 correctly added to existing graph",
-             "value of key 4 not added to existing graph")
-        assert self.graph.getValue(7) == 10,\
-            ("value of key 7 correctly added to existing graph",
-             "value of key 7 not added to existing graph")
+        assert self.graph.getPath(4) == {5, 1, 4}, "no path to key 4 found"
+        assert self.graph.getPath(7) == {5, 1, 8, 6, 7} or\
+            self.graph.getPath(7) == {5, 1, 4, 6, 7},\
+            "no path to key 7 found"
 
     def testLCA(self):
 
-        self.graph.addValue(11, 12)
-        self.graph.addValue(10, 13)
-        self.graph.addValue(12, 14)
+        self.graph.addValue(11, 'g')
+        self.graph.addValue(10, 'h')
+        self.graph.addValue(12, 'i')
+
+        self.graph.addEdge(7, 10)
+        self.graph.addEdge(7, 11)
+        self.graph.addEdge(11, 12)
 
         # ancestor checking goes through one of the nodes
-        assert self.graph.getLowestCommonAncestor(10, 11) == 11,\
-            ("correctly received close ancestor key 7 for 10 and 11"
-             "LCA failed, expected key 7 on keys 10 and 11")
+        assert self.graph.getLowestCommonAncestor(10, 7) == 7,\
+            "LCA failed, expected key 7 on keys 10 and 7"
 
         # ancestor should be directly above the two nodes
-        assert self.graph.getLowestCommonAncestor(12, 10) == 11,\
-            ("correctly received close ancestor key 11 for 12 and 10"
-             "LCA failed, expected key 11 on keys 12 and 10")
+        assert self.graph.getLowestCommonAncestor(11, 10) == 7,\
+            "LCA failed, expected key 7 on keys 11 and 10"
 
         # checking for keys further away
-        assert self.graph.getLowestCommonAncestor(12, 4) == 5,\
-            ("correctly found distant ancestor key 5 for 12 and 4",
-             "LCA failed for distant ancestor 5 for keys 12 and 4")
+        assert self.graph.getLowestCommonAncestor(12, 10) == 7,\
+            "LCA failed for distant ancestor 7 for keys 12 and 10"
 
         # key doesn't exist
         assert self.graph.getLowestCommonAncestor(13, 4) is None,\
-            ("correctly found None for value that doesn't exist",
-             "didn't return none for non-existent key for some reason")
+            "didn't return none for non-existent key for some reason"
 
 
 # main

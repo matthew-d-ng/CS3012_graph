@@ -1,71 +1,56 @@
 
-class BinaryGraph(object):
+class DAGraph(object):
 
     def __init__(self):
         self.root = None
-
-    class GraphNode(object):
-
-        def __init__(self, key, value):
-            self.key = key
-            self.value = value
-            self.left = None
-            self.right = None
-            self.size = 1
-
-    def getSize(self):
-        return self._getSize(self.root)
-
-    def _getSize(self, node):
-        if node is not None:
-            return node.size
-        return 0
+        self.nodes = dict()
+        self.values = dict()
 
     def isEmpty(self):
         return self.getSize() == 0
 
+    def getSize(self):
+        return len(self.nodes)
+
     def contains(self, key):
-        return self.getValue(key) is not None
+        return key in self.nodes
 
     def addValue(self, key, value):
         if key is not None and value is not None:
-            self.root = self._addValue(self.root, key, value)
+            if self.isEmpty():
+                self.root = key
+            self.nodes[key] = []
+            self.values[key] = value
             return True
         return False
 
-    def _addValue(self, currentNode, key, value):
-        # TODO
-        return currentNode
-
     def getValue(self, key):
-        if key is not None and self.root is not None:
-            return self._getValue(self.root, key)
-        else:
-            return None
-
-    def _getValue(self, currentNode, key):
-        # TODO
+        if key is not None and self.contains(key):
+            return self.values.getValue(key)
         return None
 
     def removeKey(self, key):
-        self.root = self._removeKey(self.root, key)
+        if key in self.nodes:
+            del self.values[key]
+            del self.nodes[key]
+            for node in self.nodes:
+                i = node.find(key)
+                if i >= 0:
+                    node.remove(key)
 
-    def _removeKey(self, currentNode, key):
+    def addEdge(self, key1, key2):
+        if key1 in self.nodes and key2 in self.nodes\
+         and not self.pathTo(key2, key1):
+            self.nodes[key1].append(key2)
+
+    def pathTo(self, key1, key2):
         # TODO
-        return currentNode
+        return False
 
     def getLowestCommonAncestor(self, key1, key2):
-        if key1 is not None and key2 is not None and self.root is not None:
-            if self.contains(key1) and self.contains(key2):
-                if key1 != key2:
-                    return self._getLowestCommonAncestor(self.root, key1, key2)
-                else:
-                    return key1
+        # TODO
         return None
 
     def _getLowestCommonAncestor(self, currentNode, key1, key2):
-        if key1 < currentNode.key and key2 < currentNode.key:
-            return self._getLowestCommonAncestor(currentNode.left, key1, key2)
-        if key1 > currentNode.key and key2 > currentNode.key:
-            return self._getLowestCommonAncestor(currentNode.right, key1, key2)
+        # TODO
         return currentNode.key

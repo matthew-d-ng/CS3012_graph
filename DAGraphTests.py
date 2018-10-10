@@ -86,6 +86,6 @@ class GraphTest(unittest.TestCase):
 # main
 tests = GraphTest()
 tests.testForEmptyGraph()
-tests.testForNonEmptyGraph()
-tests.testLCA()
+# tests.testForNonEmptyGraph()
+# tests.testLCA()
 print("Concluded tests.")

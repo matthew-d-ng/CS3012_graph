@@ -29,16 +29,15 @@ class GraphTest(unittest.TestCase):
         self.graph.addValue(1, 'b')
         self.graph.removeKey(1)
         assert self.graph.getValue(1) is None, "key 1 didn't remove"
-        assert self.graph.getPath(1) is None,\
+        assert self.graph.getPathFromRoot(1) is None,\
             "returning non-existent path from 5 to 1"
 
         self.graph.addValue(1, 'b')
         self.graph.addValue(8, 'c')
         assert self.graph.addEdge(5, 1), "edge failed to add"
         self.graph.addEdge(1, 8)
-        assert self.graph.getPath(8) == {5, 1, 8},\
+        assert self.graph.getPathFromRoot(8) == [5, 1, 8],\
             "path to 8 unexpected path"
-
         assert not self.graph.addEdge(8, 5), "cycle created in acyclic graph"
 
         # build a graph
@@ -51,9 +50,10 @@ class GraphTest(unittest.TestCase):
         self.graph.addValue(7, 'f')
         self.graph.addEdge(6, 7)
 
-        assert self.graph.getPath(4) == {5, 1, 4}, "no path to key 4 found"
-        assert self.graph.getPath(7) == {5, 1, 8, 6, 7} or\
-            self.graph.getPath(7) == {5, 1, 4, 6, 7},\
+        assert self.graph.getPathFromRoot(4) == [5, 1, 4], \
+            "no path to key 4 found"
+        assert self.graph.getPathFromRoot(7) == [5, 1, 8, 6, 7] or\
+            self.graph.getPathFromRoot(7) == [5, 1, 4, 6, 7],\
             "no path to key 7 found"
 
     def testLCA(self):
@@ -86,6 +86,6 @@ class GraphTest(unittest.TestCase):
 # main
 tests = GraphTest()
 tests.testForEmptyGraph()
-# tests.testForNonEmptyGraph()
+tests.testForNonEmptyGraph()
 # tests.testLCA()
 print("Concluded tests.")

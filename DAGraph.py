@@ -66,7 +66,60 @@ class DAGraph(object):
             return short
         return None
 
-    def getLowestCommonAncestor(self, key1, key2):
-        # TODO
-        # get all paths from to both nodes from root
+    def getAllPaths(self, key1, key2, path=[]):
+        """ returns a list of every path to key2 from key1 """
+        if key1 in self.nodes and key2 in self.nodes:
+            path = path + [key1]
+            if key1 == key2:
+                return [path]
+            paths = []
+            for key in self.nodes.get(key1):
+                if key not in path:
+                    newpaths = self.getAllPaths(key, key2, path)
+                    for newpath in newpaths:
+                        paths.append(newpath)
+            return paths
         return None
+
+    def getLowestCommonAncestor(self, key1, key2):
+        """ Returns a list of all lowest common ancestors for 2 keys
+            Returns None for no common ancestors found
+            (Brute Force) """
+        # Uses a lot of memory B)
+        if key1 in self.nodes and key2 in self.nodes:
+            # Get 2 dicts of ancestors (key:depth)
+            key1ancestors = self._getAncestors(key1)
+            key2ancestors = self._getAncestors(key2)
+            if key1ancestors is None or key2ancestors is None:
+                return None
+            # Finding common ancestors
+            common = dict()
+            for key, depth in key1ancestors.items():
+                if key in key2ancestors:
+                    common[key] = depth
+            if len(common) == 0:
+                return None
+            # find lowest common ancestors i.e largest depth
+            # a DAG can have multiple LCAs for a pair of nodes
+            lowestCommon = list()
+            lowest = None
+            for key, depth in common.items():
+                if lowest is None or depth > lowest:
+                    lowest = depth
+            for key, depth in common.items():
+                if depth == lowest:
+                    lowestCommon.append(key)
+            return lowestCommon
+        return None
+
+    def _getAncestors(self, key):
+        paths = self.getAllPaths(self.root, key)
+        if len(paths) == 0:
+            return None
+        ancestors = dict()
+        for path in paths:
+            for depth in range(len(path)):
+                if path[depth] not in ancestors\
+                        or depth < ancestors[path[depth]]:
+                    ancestors[path[depth]] = depth
+        return ancestors

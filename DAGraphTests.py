@@ -67,25 +67,35 @@ class GraphTest(unittest.TestCase):
         self.graph.addEdge(11, 12)
 
         # ancestor checking goes through one of the nodes
-        assert self.graph.getLowestCommonAncestor(10, 7) == 7,\
+        assert self.graph.getLowestCommonAncestor(10, 7) == [7],\
             "LCA failed, expected key 7 on keys 10 and 7"
 
         # ancestor should be directly above the two nodes
-        assert self.graph.getLowestCommonAncestor(11, 10) == 7,\
+        assert self.graph.getLowestCommonAncestor(11, 10) == [7],\
             "LCA failed, expected key 7 on keys 11 and 10"
 
         # checking for keys further away
-        assert self.graph.getLowestCommonAncestor(12, 10) == 7,\
+        assert self.graph.getLowestCommonAncestor(12, 10) == [7],\
             "LCA failed for distant ancestor 7 for keys 12 and 10"
 
         # key doesn't exist
         assert self.graph.getLowestCommonAncestor(13, 4) is None,\
             "didn't return none for non-existent key for some reason"
 
+        self.graph.addValue(9, 'j')
+        self.graph.addEdge(6, 9)
+        self.graph.addEdge(9, 10)
+        self.graph.addEdge(9, 11)
+
+        # test for 2 LCAs returned
+        assert self.graph.getLowestCommonAncestor(10, 11) == [7, 9]\
+            or self.graph.getLowestCommonAncestor(10, 11) == [9, 7],\
+            "LCA failed for returning 2 LCAs for 10, 11"
+
 
 # main
 tests = GraphTest()
 tests.testForEmptyGraph()
 tests.testForNonEmptyGraph()
-# tests.testLCA()
+tests.testLCA()
 print("Concluded tests.")

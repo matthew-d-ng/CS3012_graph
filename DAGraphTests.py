@@ -23,8 +23,18 @@ class GraphTest(unittest.TestCase):
 
     def testForNonEmptyGraph(self):
 
+        assert not self.graph.isEmpty(), "non-empty graph returning empty"
+
+        assert self.graph.getSize() == 1, "size of non-empty graph wrong"
+
+        assert self.graph.contains(5), "non-empty graph doesn't have key 5"
+
+        assert not self.graph.contains(None), "graph contains none"
+
         assert self.graph.getValue(5) == 'a',\
             "value not returned after adding to empty graph"
+
+        assert self.graph.getValue(None) is None, "Getting Value from None"
 
         self.graph.addValue(1, 'b')
         self.graph.removeKey(1)
